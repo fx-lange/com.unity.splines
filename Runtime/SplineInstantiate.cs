@@ -499,6 +499,9 @@ namespace UnityEngine.Splines
         readonly List<GameObject> m_Instances = new List<GameObject>();
         internal List<GameObject> instances => m_Instances;
         bool m_InstancesCacheDirty = false;
+        
+        public List<GameObject> Instances => m_Instances;
+        public List<float> InstanceTimes => m_TimesCache;
 
         [SerializeField]
         bool m_AutoRefresh = true;
