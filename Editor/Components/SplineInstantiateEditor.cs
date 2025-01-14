@@ -112,6 +112,7 @@ class SplineInstantiateEditor : SplineComponentEditor
     SerializedProperty m_UpAxis;
     SerializedProperty m_ForwardAxis;
     SerializedProperty m_Spacing;
+    SerializedProperty m_StartOffset;
     SerializedProperty m_PositionOffset;
     SerializedProperty m_RotationOffset;
     SerializedProperty m_ScaleOffset;
@@ -142,6 +143,7 @@ class SplineInstantiateEditor : SplineComponentEditor
     SpawnType m_SpacingType;
 
     //Offsets
+    static readonly string k_StartOffsetT = L10n.Tr("Start Offset Distance");
     static readonly string k_PositionOffset = L10n.Tr("Position Offset");
     static readonly string k_PositionOffsetTooltip = L10n.Tr("Whether or not to use a position offset.");
     static readonly string k_RotationOffset = L10n.Tr("Rotation Offset");
@@ -214,6 +216,7 @@ class SplineInstantiateEditor : SplineComponentEditor
 
         m_Spacing = serializedObject.FindProperty("m_Spacing");
 
+        m_StartOffset = serializedObject.FindProperty("m_StartOffset");
         m_PositionOffset = serializedObject.FindProperty("m_PositionOffset");
         m_RotationOffset = serializedObject.FindProperty("m_RotationOffset");
         m_ScaleOffset = serializedObject.FindProperty("m_ScaleOffset");
@@ -392,6 +395,9 @@ class SplineInstantiateEditor : SplineComponentEditor
         }
 
         EditorGUILayout.PropertyField(m_Space, new GUIContent(k_AlignTo, k_AlignToTooltip));
+
+        EditorGUILayout.PropertyField(m_StartOffset, new GUIContent(k_StartOffsetT));
+        
         EditorGUI.indentLevel--;
     }
 

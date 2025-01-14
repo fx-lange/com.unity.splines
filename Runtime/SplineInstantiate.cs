@@ -290,6 +290,8 @@ namespace UnityEngine.Splines
             }
         }
 
+        [SerializeField] float m_StartOffset = 0;
+
         [SerializeField]
         Vector3Offset m_PositionOffset;
 
@@ -848,7 +850,7 @@ namespace UnityEngine.Splines
                         }
                     }
                     else
-                        currentDist = 0f;
+                        currentDist = m_StartOffset;
 
                     m_TimesCache.Clear();
                     int timeIndex = 0;
