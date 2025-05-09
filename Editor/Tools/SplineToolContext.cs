@@ -43,7 +43,7 @@ namespace UnityEditor.Splines
 #endif
     public sealed class SplineToolContext : EditorToolContext
     {
-        const string k_IconPath = "Packages/com.unity.splines/Editor/Resources/Icons/SplineContext.png";
+        const string k_IconPath = "Packages/com.unity.splines/Editor/Editor Resources/Icons/SplineContext.png";
 
         static bool s_UseCustomSplineHandles = false;
 
@@ -294,7 +294,7 @@ namespace UnityEditor.Splines
                     var spline = splinesToRemove[i];
                     SplineSelection.Remove(spline);
                     spline.Container.RemoveSplineAt(spline.Index);
-                    
+
                     if (spline.Object != null)
                         PrefabUtility.RecordPrefabInstancePropertyModifications(spline.Object);
                 }

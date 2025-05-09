@@ -26,7 +26,7 @@ namespace UnityEditor.Splines
 
         SplineAnimate m_SplineAnimate;
 
-        const string k_UxmlPath = "Packages/com.unity.splines/Editor/Resources/UI/UXML/splineanimate-inspector.uxml";
+        const string k_UxmlPath = "Packages/com.unity.splines/Editor/Editor Resources/UI/UXML/splineanimate-inspector.uxml";
         static VisualTreeAsset s_TreeAsset;
         static StyleSheet s_ThemeStyleSheet;
 
@@ -59,13 +59,13 @@ namespace UnityEditor.Splines
                 if (animate.Container != null)
                     animate.RecalculateAnimationParameters();
             }
-            
+
             m_Roots.Clear();
             m_ObjectForwardFields.Clear();
             m_ObjectUpFields.Clear();
             m_ProgressSliders.Clear();
             m_ElapsedTimeFields.Clear();
-            
+
             EditorApplication.update += OnEditorUpdate;
             Spline.Changed += OnSplineChange;
             SplineContainer.SplineAdded += OnContainerSplineSetModified;
@@ -77,14 +77,17 @@ namespace UnityEditor.Splines
             if(m_SplineAnimate != null)
                 m_SplineAnimate.Updated -= OnSplineAnimateUpdated;
 
-            if (!EditorApplication.isPlaying)
+            if (!EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                foreach (var animate in m_Components)
+                if (m_Components != null)
                 {
-                    if (animate.Container != null)
+                    foreach (var animate in m_Components)
                     {
-                        animate.RecalculateAnimationParameters();
-                        animate.Restart(false);
+                        if (animate != null && animate.Container != null)
+                        {
+                            animate.RecalculateAnimationParameters();
+                            animate.Restart(false);
+                        }
                     }
                 }
             }
@@ -145,7 +148,7 @@ namespace UnityEditor.Splines
                 s_ThemeStyleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>($"Packages/com.unity.splines/Editor/Stylesheets/SplineAnimateInspector{(EditorGUIUtility.isProSkin ? "Dark" : "Light")}.uss");
 
             root.styleSheets.Add(s_ThemeStyleSheet);
-            
+
             var methodField = root.Q<PropertyField>("method");
             methodField.RegisterValueChangeCallback((_) => { RefreshMethodParamFields((SplineAnimate.Method)m_MethodProperty.enumValueIndex); });
             RefreshMethodParamFields((SplineAnimate.Method)m_MethodProperty.enumValueIndex);
@@ -184,16 +187,16 @@ namespace UnityEditor.Splines
                 {
                     m_SplineAnimate.Restart(false);
                     OnElapsedTimeFieldChange(elapsedTimeField.value);
-                }   
+                }
             });
 
             m_Roots.Add(root);
             m_ProgressSliders.Add(progressSlider);
             m_ElapsedTimeFields.Add(elapsedTimeField);
-            
+
             m_ObjectForwardFields.Add(objectForwardField);
             m_ObjectUpFields.Add(objectUpField);
-            
+
             return root;
         }
 
@@ -253,7 +256,7 @@ namespace UnityEditor.Splines
             if (changeEvent.newValue == null)
                 return;
 
-            
+
             var newValue = (SplineAnimate.AlignAxis)changeEvent.newValue;
             var previousValue = (SplineAnimate.AlignAxis)changeEvent.previousValue;
 
@@ -327,7 +330,7 @@ namespace UnityEditor.Splines
         [DrawGizmo(GizmoType.Selected | GizmoType.Active)]
         static void DrawSplineAnimateGizmos(SplineAnimate splineAnimate, GizmoType gizmoType)
         {
-            if (splineAnimate.Container == null)
+            if ((!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode) || splineAnimate.Container == null)
                 return;
 
             const float k_OffsetGizmoSize = 0.15f;
@@ -344,7 +347,7 @@ namespace UnityEditor.Splines
                     forward = splineAnimate.Container.EvaluateTangent(Mathf.Min(1f, splineAnimate.StartOffsetT + 0.01f));
                 else
                     forward = splineAnimate.Container.EvaluateTangent(splineAnimate.StartOffsetT - 0.01f);
-                    
+
             }
             Handles.ConeHandleCap(-1, offsetPos, Quaternion.LookRotation(Vector3.Normalize(forward), up), k_OffsetGizmoSize * HandleUtility.GetHandleSize(offsetPos), EventType.Repaint);
         }
