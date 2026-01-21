@@ -742,6 +742,7 @@ namespace UnityEngine.Splines
                 DestroyImmediate(m_InstancesRoot);
 #else
                 Destroy(m_InstancesRoot);
+                m_InstancesRoot = null;
 #endif
                 m_Instances.Clear();
                 m_InstancesCacheDirty = false;
